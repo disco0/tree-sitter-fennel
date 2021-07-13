@@ -3,15 +3,23 @@
   "version": "1.0.0",
   "description": "",
   "main": "bindings/node",
+  "types": "./grammar.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "compile:grammar:dts": "node ./node_modules/tree-sitter-dts/build/src/index.js . > ./grammar.d.ts",
+    "compile:grammar:wasm": "npx tree-sitter build-wasm && npx shx cp ./tree-sitter-fennel.wasm ./wasm"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "nan": "^2.14.0"
+    "nan": "^2.14.2"
+  },
+  "tree-sitter": {
+    "scope": "source.fennel",
+    "file-types": ["fnl"],
+    "first-line-regex": "^#(?:(?:[ ]*|[\\/]([^\\n\\/]+[\\/])*)fennel.*)"
   },
   "devDependencies": {
-    "tree-sitter-cli": "^0.19.3"
+    "tree-sitter-dts": "github:disco0/dts-tree-sitter.git",
+    "tree-sitter-cli": "^0.20.0"
   }
 }

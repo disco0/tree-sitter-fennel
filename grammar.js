@@ -315,7 +315,7 @@ module.exports = grammar({
       $._comparison_operator,
       $._boolean_operator,
       $._threading_macro,
-      $._misc_operator,
+      $._dots_operator,
       alias($.colon, $.identifier)
     ),
 
@@ -335,7 +335,10 @@ module.exports = grammar({
       'and', 'or', 'not'
     ),
 
-    _misc_operator: $ => choice('..', '.', '...'),
+    /**
+     * @TODO Separate into proper contexts (e.g. `...` is a variable, not an operator)
+     */
+    _dots_operator: $ => choice('...', '..', '.'),
 
     boolean: $ => choice('true', 'false'),
 

@@ -72,8 +72,8 @@ enum {
   anon_sym_and = 53,
   anon_sym_or = 54,
   anon_sym_not = 55,
-  anon_sym_DOT_DOT = 56,
-  anon_sym_DOT_DOT_DOT = 57,
+  anon_sym_DOT_DOT_DOT = 56,
+  anon_sym_DOT_DOT = 57,
   anon_sym_true = 58,
   anon_sym_false = 59,
   anon_sym_nil = 60,
@@ -179,7 +179,7 @@ enum {
   sym__comparison_operator = 160,
   sym__threading_macro = 161,
   sym__boolean_operator = 162,
-  sym__misc_operator = 163,
+  sym__dots_operator = 163,
   sym_boolean = 164,
   sym_nil = 165,
   sym__keyword = 166,
@@ -195,7 +195,7 @@ enum {
   aux_sym_field_expression_repeat1 = 176,
 };
 
-static const char *ts_symbol_names[] = {
+static const char * const ts_symbol_names[] = {
   [ts_builtin_sym_end] = "end",
   [sym_identifier] = "identifier",
   [anon_sym_LPAREN] = "(",
@@ -252,8 +252,8 @@ static const char *ts_symbol_names[] = {
   [anon_sym_and] = "and",
   [anon_sym_or] = "or",
   [anon_sym_not] = "not",
-  [anon_sym_DOT_DOT] = "..",
   [anon_sym_DOT_DOT_DOT] = "...",
+  [anon_sym_DOT_DOT] = "..",
   [anon_sym_true] = "true",
   [anon_sym_false] = "false",
   [anon_sym_nil] = "nil",
@@ -359,7 +359,7 @@ static const char *ts_symbol_names[] = {
   [sym__comparison_operator] = "_comparison_operator",
   [sym__threading_macro] = "_threading_macro",
   [sym__boolean_operator] = "_boolean_operator",
-  [sym__misc_operator] = "_misc_operator",
+  [sym__dots_operator] = "_dots_operator",
   [sym_boolean] = "boolean",
   [sym_nil] = "nil",
   [sym__keyword] = "identifier",
@@ -375,7 +375,7 @@ static const char *ts_symbol_names[] = {
   [aux_sym_field_expression_repeat1] = "field_expression_repeat1",
 };
 
-static TSSymbol ts_symbol_map[] = {
+static const TSSymbol ts_symbol_map[] = {
   [ts_builtin_sym_end] = ts_builtin_sym_end,
   [sym_identifier] = sym_identifier,
   [anon_sym_LPAREN] = anon_sym_LPAREN,
@@ -432,8 +432,8 @@ static TSSymbol ts_symbol_map[] = {
   [anon_sym_and] = anon_sym_and,
   [anon_sym_or] = anon_sym_or,
   [anon_sym_not] = anon_sym_not,
-  [anon_sym_DOT_DOT] = anon_sym_DOT_DOT,
   [anon_sym_DOT_DOT_DOT] = anon_sym_DOT_DOT_DOT,
+  [anon_sym_DOT_DOT] = anon_sym_DOT_DOT,
   [anon_sym_true] = anon_sym_true,
   [anon_sym_false] = anon_sym_false,
   [anon_sym_nil] = anon_sym_nil,
@@ -539,7 +539,7 @@ static TSSymbol ts_symbol_map[] = {
   [sym__comparison_operator] = sym__comparison_operator,
   [sym__threading_macro] = sym__threading_macro,
   [sym__boolean_operator] = sym__boolean_operator,
-  [sym__misc_operator] = sym__misc_operator,
+  [sym__dots_operator] = sym__dots_operator,
   [sym_boolean] = sym_boolean,
   [sym_nil] = sym_nil,
   [sym__keyword] = sym_identifier,
@@ -780,11 +780,11 @@ static const TSSymbolMetadata ts_symbol_metadata[] = {
     .visible = true,
     .named = false,
   },
-  [anon_sym_DOT_DOT] = {
+  [anon_sym_DOT_DOT_DOT] = {
     .visible = true,
     .named = false,
   },
-  [anon_sym_DOT_DOT_DOT] = {
+  [anon_sym_DOT_DOT] = {
     .visible = true,
     .named = false,
   },
@@ -1208,7 +1208,7 @@ static const TSSymbolMetadata ts_symbol_metadata[] = {
     .visible = false,
     .named = true,
   },
-  [sym__misc_operator] = {
+  [sym__dots_operator] = {
     .visible = false,
     .named = true,
   },
@@ -1273,7 +1273,7 @@ enum {
   field_name = 4,
 };
 
-static const char *ts_field_names[] = {
+static const char * const ts_field_names[] = {
   [0] = NULL,
   [field_body] = "body",
   [field_condition] = "condition",
@@ -1317,11 +1317,11 @@ static const TSFieldMapEntry ts_field_map_entries[] = {
     {field_name, 0},
 };
 
-static TSSymbol ts_alias_sequences[PRODUCTION_ID_COUNT][MAX_ALIAS_SEQUENCE_LENGTH] = {
+static const TSSymbol ts_alias_sequences[PRODUCTION_ID_COUNT][MAX_ALIAS_SEQUENCE_LENGTH] = {
   [0] = {0},
 };
 
-static uint16_t ts_non_terminal_alias_map[] = {
+static const uint16_t ts_non_terminal_alias_map[] = {
   0,
 };
 
@@ -1538,7 +1538,7 @@ static bool ts_lex(TSLexer *lexer, TSStateId state) {
       END_STATE();
     case 34:
       ACCEPT_TOKEN(anon_sym_DOT);
-      if (lookahead == '.') ADVANCE(52);
+      if (lookahead == '.') ADVANCE(53);
       END_STATE();
     case 35:
       ACCEPT_TOKEN(anon_sym_PLUS);
@@ -1599,11 +1599,11 @@ static bool ts_lex(TSLexer *lexer, TSStateId state) {
       ACCEPT_TOKEN(anon_sym_DASH_QMARK_GT_GT);
       END_STATE();
     case 52:
-      ACCEPT_TOKEN(anon_sym_DOT_DOT);
-      if (lookahead == '.') ADVANCE(53);
+      ACCEPT_TOKEN(anon_sym_DOT_DOT_DOT);
       END_STATE();
     case 53:
-      ACCEPT_TOKEN(anon_sym_DOT_DOT_DOT);
+      ACCEPT_TOKEN(anon_sym_DOT_DOT);
+      if (lookahead == '.') ADVANCE(52);
       END_STATE();
     case 54:
       ACCEPT_TOKEN(sym_identifier);
@@ -2784,7 +2784,7 @@ static bool ts_lex_keywords(TSLexer *lexer, TSStateId state) {
   }
 }
 
-static TSLexMode ts_lex_modes[STATE_COUNT] = {
+static const TSLexMode ts_lex_modes[STATE_COUNT] = {
   [0] = {.lex_state = 0, .external_lex_state = 1},
   [1] = {.lex_state = 9, .external_lex_state = 2},
   [2] = {.lex_state = 3, .external_lex_state = 2},
@@ -3066,12 +3066,12 @@ enum {
   ts_external_token_colon = 1,
 };
 
-static TSSymbol ts_external_scanner_symbol_map[EXTERNAL_TOKEN_COUNT] = {
+static const TSSymbol ts_external_scanner_symbol_map[EXTERNAL_TOKEN_COUNT] = {
   [ts_external_token_field] = sym_field,
   [ts_external_token_colon] = sym_colon,
 };
 
-static bool ts_external_scanner_states[4][EXTERNAL_TOKEN_COUNT] = {
+static const bool ts_external_scanner_states[4][EXTERNAL_TOKEN_COUNT] = {
   [1] = {
     [ts_external_token_field] = true,
     [ts_external_token_colon] = true,
@@ -3084,7 +3084,7 @@ static bool ts_external_scanner_states[4][EXTERNAL_TOKEN_COUNT] = {
   },
 };
 
-static uint16_t ts_parse_table[LARGE_STATE_COUNT][SYMBOL_COUNT] = {
+static const uint16_t ts_parse_table[LARGE_STATE_COUNT][SYMBOL_COUNT] = {
   [0] = {
     [ts_builtin_sym_end] = ACTIONS(1),
     [sym_identifier] = ACTIONS(1),
@@ -3140,8 +3140,8 @@ static uint16_t ts_parse_table[LARGE_STATE_COUNT][SYMBOL_COUNT] = {
     [anon_sym_and] = ACTIONS(1),
     [anon_sym_or] = ACTIONS(1),
     [anon_sym_not] = ACTIONS(1),
-    [anon_sym_DOT_DOT] = ACTIONS(1),
     [anon_sym_DOT_DOT_DOT] = ACTIONS(1),
+    [anon_sym_DOT_DOT] = ACTIONS(1),
     [anon_sym_true] = ACTIONS(1),
     [anon_sym_false] = ACTIONS(1),
     [anon_sym_nil] = ACTIONS(1),
@@ -3739,7 +3739,7 @@ static uint16_t ts_parse_table[LARGE_STATE_COUNT][SYMBOL_COUNT] = {
     [sym__comparison_operator] = STATE(141),
     [sym__threading_macro] = STATE(141),
     [sym__boolean_operator] = STATE(141),
-    [sym__misc_operator] = STATE(141),
+    [sym__dots_operator] = STATE(141),
     [sym__keyword] = STATE(5),
     [sym_identifier] = ACTIONS(51),
     [anon_sym_require] = ACTIONS(53),
@@ -3781,8 +3781,8 @@ static uint16_t ts_parse_table[LARGE_STATE_COUNT][SYMBOL_COUNT] = {
     [anon_sym_and] = ACTIONS(89),
     [anon_sym_or] = ACTIONS(89),
     [anon_sym_not] = ACTIONS(89),
-    [anon_sym_DOT_DOT] = ACTIONS(89),
     [anon_sym_DOT_DOT_DOT] = ACTIONS(91),
+    [anon_sym_DOT_DOT] = ACTIONS(89),
     [anon_sym__ENV] = ACTIONS(25),
     [anon_sym__G] = ACTIONS(25),
     [anon_sym__VERSION] = ACTIONS(25),
@@ -4159,7 +4159,7 @@ static uint16_t ts_parse_table[LARGE_STATE_COUNT][SYMBOL_COUNT] = {
     [sym__comparison_operator] = STATE(141),
     [sym__threading_macro] = STATE(141),
     [sym__boolean_operator] = STATE(141),
-    [sym__misc_operator] = STATE(141),
+    [sym__dots_operator] = STATE(141),
     [sym__keyword] = STATE(4),
     [sym_identifier] = ACTIONS(161),
     [anon_sym_require] = ACTIONS(163),
@@ -4201,8 +4201,8 @@ static uint16_t ts_parse_table[LARGE_STATE_COUNT][SYMBOL_COUNT] = {
     [anon_sym_and] = ACTIONS(89),
     [anon_sym_or] = ACTIONS(89),
     [anon_sym_not] = ACTIONS(89),
-    [anon_sym_DOT_DOT] = ACTIONS(89),
     [anon_sym_DOT_DOT_DOT] = ACTIONS(91),
+    [anon_sym_DOT_DOT] = ACTIONS(89),
     [anon_sym__ENV] = ACTIONS(25),
     [anon_sym__G] = ACTIONS(25),
     [anon_sym__VERSION] = ACTIONS(25),
@@ -11613,7 +11613,7 @@ static uint16_t ts_parse_table[LARGE_STATE_COUNT][SYMBOL_COUNT] = {
     [sym__comparison_operator] = STATE(141),
     [sym__threading_macro] = STATE(141),
     [sym__boolean_operator] = STATE(141),
-    [sym__misc_operator] = STATE(141),
+    [sym__dots_operator] = STATE(141),
     [sym__keyword] = STATE(4),
     [sym_identifier] = ACTIONS(161),
     [anon_sym_DOT] = ACTIONS(89),
@@ -11637,8 +11637,8 @@ static uint16_t ts_parse_table[LARGE_STATE_COUNT][SYMBOL_COUNT] = {
     [anon_sym_and] = ACTIONS(89),
     [anon_sym_or] = ACTIONS(89),
     [anon_sym_not] = ACTIONS(89),
-    [anon_sym_DOT_DOT] = ACTIONS(89),
     [anon_sym_DOT_DOT_DOT] = ACTIONS(91),
+    [anon_sym_DOT_DOT] = ACTIONS(89),
     [anon_sym__ENV] = ACTIONS(25),
     [anon_sym__G] = ACTIONS(25),
     [anon_sym__VERSION] = ACTIONS(25),
@@ -11700,7 +11700,7 @@ static uint16_t ts_parse_table[LARGE_STATE_COUNT][SYMBOL_COUNT] = {
     [sym__comparison_operator] = STATE(141),
     [sym__threading_macro] = STATE(141),
     [sym__boolean_operator] = STATE(141),
-    [sym__misc_operator] = STATE(141),
+    [sym__dots_operator] = STATE(141),
     [sym__keyword] = STATE(5),
     [sym_identifier] = ACTIONS(51),
     [anon_sym_DOT] = ACTIONS(89),
@@ -11724,8 +11724,8 @@ static uint16_t ts_parse_table[LARGE_STATE_COUNT][SYMBOL_COUNT] = {
     [anon_sym_and] = ACTIONS(89),
     [anon_sym_or] = ACTIONS(89),
     [anon_sym_not] = ACTIONS(89),
-    [anon_sym_DOT_DOT] = ACTIONS(89),
     [anon_sym_DOT_DOT_DOT] = ACTIONS(91),
+    [anon_sym_DOT_DOT] = ACTIONS(89),
     [anon_sym__ENV] = ACTIONS(25),
     [anon_sym__G] = ACTIONS(25),
     [anon_sym__VERSION] = ACTIONS(25),
@@ -16290,7 +16290,7 @@ static uint16_t ts_parse_table[LARGE_STATE_COUNT][SYMBOL_COUNT] = {
   },
 };
 
-static uint16_t ts_small_parse_table[] = {
+static const uint16_t ts_small_parse_table[] = {
   [0] = 8,
     ACTIONS(686), 1,
       sym_identifier,
@@ -20533,7 +20533,7 @@ static uint16_t ts_small_parse_table[] = {
       anon_sym_RPAREN,
 };
 
-static uint32_t ts_small_parse_table_map[] = {
+static const uint32_t ts_small_parse_table_map[] = {
   [SMALL_STATE(146)] = 0,
   [SMALL_STATE(147)] = 78,
   [SMALL_STATE(148)] = 156,
@@ -20664,7 +20664,7 @@ static uint32_t ts_small_parse_table_map[] = {
   [SMALL_STATE(273)] = 4595,
 };
 
-static TSParseActionEntry ts_parse_actions[] = {
+static const TSParseActionEntry ts_parse_actions[] = {
   [0] = {.entry = {.count = 0, .reusable = false}},
   [1] = {.entry = {.count = 1, .reusable = false}}, RECOVER(),
   [3] = {.entry = {.count = 1, .reusable = true}}, REDUCE(sym_program, 0),
@@ -21102,7 +21102,7 @@ void tree_sitter_fennel_external_scanner_deserialize(void *, const char *, unsig
 #endif
 
 extern const TSLanguage *tree_sitter_fennel(void) {
-  static TSLanguage language = {
+  static const TSLanguage language = {
     .version = LANGUAGE_VERSION,
     .symbol_count = SYMBOL_COUNT,
     .alias_count = ALIAS_COUNT,
@@ -21113,24 +21113,24 @@ extern const TSLanguage *tree_sitter_fennel(void) {
     .production_id_count = PRODUCTION_ID_COUNT,
     .field_count = FIELD_COUNT,
     .max_alias_sequence_length = MAX_ALIAS_SEQUENCE_LENGTH,
-    .parse_table = (const uint16_t *)ts_parse_table,
-    .small_parse_table = (const uint16_t *)ts_small_parse_table,
-    .small_parse_table_map = (const uint32_t *)ts_small_parse_table_map,
+    .parse_table = &ts_parse_table[0][0],
+    .small_parse_table = ts_small_parse_table,
+    .small_parse_table_map = ts_small_parse_table_map,
     .parse_actions = ts_parse_actions,
     .symbol_names = ts_symbol_names,
     .field_names = ts_field_names,
-    .field_map_slices = (const TSFieldMapSlice *)ts_field_map_slices,
-    .field_map_entries = (const TSFieldMapEntry *)ts_field_map_entries,
+    .field_map_slices = ts_field_map_slices,
+    .field_map_entries = ts_field_map_entries,
     .symbol_metadata = ts_symbol_metadata,
     .public_symbol_map = ts_symbol_map,
     .alias_map = ts_non_terminal_alias_map,
-    .alias_sequences = (const TSSymbol *)ts_alias_sequences,
+    .alias_sequences = &ts_alias_sequences[0][0],
     .lex_modes = ts_lex_modes,
     .lex_fn = ts_lex,
     .keyword_lex_fn = ts_lex_keywords,
     .keyword_capture_token = sym_identifier,
     .external_scanner = {
-      (const bool *)ts_external_scanner_states,
+      &ts_external_scanner_states[0][0],
       ts_external_scanner_symbol_map,
       tree_sitter_fennel_external_scanner_create,
       tree_sitter_fennel_external_scanner_destroy,
