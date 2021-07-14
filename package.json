@@ -13,13 +13,12 @@
   "dependencies": {
     "nan": "^2.14.2"
   },
-  "tree-sitter": {
-    "scope": "source.fennel",
-    "file-types": ["fnl"],
-    "first-line-regex": "^#(?:(?:[ ]*|[\\/]([^\\n\\/]+[\\/])*)fennel.*)"
-  },
   "devDependencies": {
     "tree-sitter-dts": "github:disco0/dts-tree-sitter.git",
     "tree-sitter-cli": "^0.20.0"
-  }
+  },
+  "tree-sitter": [{
+    "scope": "source.fennel",
+    "file-types": ["fnl"]
+  }]
 }

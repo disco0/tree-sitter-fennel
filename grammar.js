@@ -4,27 +4,52 @@
 module.exports = grammar({
   name: 'fennel',
 
-  word: $ => $.identifier,
+  word: $ => $._identifier_simple,
 
   externals: $ => [
     $.field,
     $.colon
   ],
 
-  rules: {
-    program: $ => repeat(choice($._statement)),
+  rules:
+  {
+    program: $ => seq(
+      repeat(choice($._statement)),
+      /**
+       * @NOTE I added this before deciding that this should be determined via selectors—leaving
+       *       in case needed later
+       */
+      // field('export', choice(prec(4, $.table), prec(1, $._expression)))
+    ),
+
+    /** @NOTE Not 100% how identifers will be organized here */
+
+    _identifier_simple: $ => /((?:[_A-Za-z]\w*\.)*[_\?A-Za-z\+][_\?\-A-Za-z0-9\!\+]*)|(\$([1-9])?)/,
+
+    _identifier_special: $ => choice(
+        '...',
+        // `&` `&ident`
+        /&[^\]\[{}()\n\s:\/#]*/,
+        // Unused | any
+        '_',
+        // Generated
+        /[^\/\[\]{}()\n\s:#]#/
+    ),
+
+    identifier: $ => choice(prec(2, $._identifier_special), $._identifier_simple),
 
     _statement: $ => choice(
+      $.comment,
       $.require,
+      $._variable_declaration,
       $.function_call,
       $._function,
       $._expression,
-      $._variable_declaration,
       $._iterator,
       $._conditional,
       $.hash_function_definition,
+      $.doto_statement,
       $.do_statement,
-      $.comment
     ),
 
     _function: $ => choice(
@@ -67,6 +92,13 @@ module.exports = grammar({
       ')'
     ),
 
+    doto_statement: $ => seq(
+      '(',
+      'doto',
+        repeat1($._statement),
+      ')'
+    ),
+
     when_statement: $ => seq(
       '(',
       'when',
@@ -101,8 +133,11 @@ module.exports = grammar({
         $.identifier,
         $.identifier,
         $.function_call,
+        optional($._until_condition),
       ']'
     ),
+
+    _until_condition: $ => seq(':until', $._expression),
 
     for: $ => seq(
       '(',
@@ -117,7 +152,10 @@ module.exports = grammar({
         $.identifier,
         $._statement,
         $._statement,
+        // Step
         optional($._statement),
+        // Step
+        optional($._until_condition),
       ']'
     ),
 
@@ -168,8 +206,8 @@ module.exports = grammar({
     tset: $ => seq(
       '(',
         'tset',
-        optional(choice($.table, $.identifier)),
-        choice($.identifier, $.field, $.string),
+        choice($.table, $.identifier),
+        choice($._statement),
         choice($._statement),
       ')'
     ),
@@ -232,15 +270,20 @@ module.exports = grammar({
         $.string
     )),
 
+    /**
+     * @NOTE Consider integrating various well-defined function call forms (`let`, `doto`, `etc`)
+     *       into main function_call rule
+     */
     function_call: $ => seq(
       '(',
         field('name', choice(
+          $.unquoted_value,
           $.field_expression,
           $.identifier,
           alias($._operator, $.identifier),
           alias($._keyword, $.identifier)
         )),
-        optional(repeat($._statement)),
+        repeat($._statement),
       ')'
     ),
 
@@ -264,6 +307,7 @@ module.exports = grammar({
     _expression: $ => choice(
       $.field_expression,
       $.quoted_value,
+      $._identifier_special,
       $.unquoted_value,
       $.number,
       $.field,
@@ -280,7 +324,7 @@ module.exports = grammar({
 
     string: $ => seq(
       '"',
-      repeat(/(\\")|(.)/),
+      repeat(/(\\.)|([^"])/),
       '"'
     ),
 
@@ -312,15 +356,20 @@ module.exports = grammar({
 
     _operator: $ => choice(
       $._arithmetic_operator,
+      $._access_operator,
       $._comparison_operator,
       $._boolean_operator,
+      $._concat_operator,
       $._threading_macro,
-      $._dots_operator,
       alias($.colon, $.identifier)
     ),
 
     _arithmetic_operator: $ => choice(
       '+', '-', '*', '%', '/', '//', '^'
+    ),
+
+    _access_operator: $ => choice(
+       '#', 'length', '?.', '.'
     ),
 
     _comparison_operator: $ => choice(
@@ -335,10 +384,7 @@ module.exports = grammar({
       'and', 'or', 'not'
     ),
 
-    /**
-     * @TODO Separate into proper contexts (e.g. `...` is a variable, not an operator)
-     */
-    _dots_operator: $ => choice('...', '..', '.'),
+    _concat_operator: $ => '..',
 
     boolean: $ => choice('true', 'false'),
 
@@ -354,7 +400,7 @@ module.exports = grammar({
       'coroutine',
       'debug',
       'dofile',
-      'doto',
+      // 'doto',
       'error',
       'eval-compiler',
       'gensym',
@@ -365,6 +411,7 @@ module.exports = grammar({
       'ipairs',
       'list',
       'list?',
+      'lua',
       'load',
       'loadfile',
       'loadstring',
@@ -398,8 +445,6 @@ module.exports = grammar({
       'string',
       'table'
     ),
-
-    identifier: $ => /([_\?A-Za-z][_\?\-A-Za-z0-9\!]*)|(\$([1-9])?)/,
 
     number: $ => /([-])?\d+(\.\d+)?/,
 
